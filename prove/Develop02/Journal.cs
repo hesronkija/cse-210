@@ -4,7 +4,7 @@ using static System.Console;
 
 class Journal
 {
-    public List<Entry> entries;
+    private  List<Entry> entries;
 
     public Journal()
     {

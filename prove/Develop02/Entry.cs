@@ -1,8 +1,8 @@
 class Entry
 {
-    public string prompt;
-    public string response;
-    public string date;
+    private string prompt;
+    private string response;
+    private string date;
 
     public Entry(string prompt, string response, string date)
     {
@@ -28,3 +28,4 @@ class Entry
         return $"{date}: {prompt}\n{response}\n";
     }
 }
+ 
