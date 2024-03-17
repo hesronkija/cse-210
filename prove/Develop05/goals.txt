@@ -1,0 +1,5 @@
+Total points: 300
+SimpleGoal|Talk to RK|Get her number|200
+SimpleGoal|Eat|try to eat healthy|100
+EternalGoal|Read scriptures|Remember what the sisters told you|100
+ChecklistGoal|Workout|Go to the gym|100|0|3|50
