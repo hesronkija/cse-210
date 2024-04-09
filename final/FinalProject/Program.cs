@@ -12,7 +12,81 @@ class Program
     static Faculty faculty = new Faculty();
     static Semester semester = new Semester();
     static Enrollment enrollment = new Enrollment();
+    static Grading grading = new Grading();
+
     static void DisplayMenu()
+    {
+        int choice;
+        do
+        {
+            WriteLine("========= Welcome to Academic Portal =========");
+            WriteLine("1. Grading ");
+            WriteLine("2. Management Systems(For Authorized Personel)");
+            WriteLine("3. Exit");
+            WriteLine();
+            Write("Enter your choice: ");
+            choice = int.Parse(ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Clear();
+                    Grading();
+                    break;
+                case 2:
+                    Clear();
+                    if (AuthenticateUser())
+                    {
+                        Write("Logging in");
+                        Animation(3);
+                        Clear();
+                        DisplayManagementMenu();
+                    }
+                    else
+                    {
+                        Write("Invalid username or password. ");
+                        ForegroundColor = ConsoleColor.Red;
+                        WriteLine("Access denied.\n");
+                        ForegroundColor = ConsoleColor.White;
+                    }
+                    break;
+                case 3:
+                    WriteLine("Exiting program...");
+                    break;
+                default:
+                    WriteLine("Invalid choice. Please enter a number between 1 and 6.");
+                    break;
+            }
+        } while (choice != 6);
+    }
+    static bool AuthenticateUser()
+    {
+        Authentication auth = new Authentication();
+        Write("Enter username: ");
+        string username = ReadLine();
+        Write("Enter password: ");
+        string password = ReadLine();
+        return auth.Authenticate(username, password);
+    }
+    static void Animation(int seconds)
+    {
+        for (int i = 0; i < seconds; i++)
+        {
+            Write(".");
+            Thread.Sleep(250);
+            Write("\b \b");
+            Write("..");
+            Thread.Sleep(250);
+            Write("\b\b  \b\b");
+            Write("...");
+            Thread.Sleep(250);
+            Write("\b\b\b   \b\b\b");
+            Write(" ");
+            Thread.Sleep(250);
+            Write("\b \b");
+        }
+    }
+    static void DisplayManagementMenu()
     {
         int choice;
 
@@ -24,7 +98,7 @@ class Program
             WriteLine("3. Enrollment Management");
             WriteLine("4. Faculty Management");
             WriteLine("5. Semester Management");
-            WriteLine("6. Exit");
+            WriteLine("6. Back to main Menu");
             WriteLine();
             Write("Enter your choice: ");
             choice = int.Parse(ReadLine());
@@ -56,6 +130,51 @@ class Program
             }
         } while (choice != 6);
     }
+
+    // Gdrading
+    static void Grading()
+    {
+        int choice;
+
+        do
+        {
+            WriteLine("========= Grading =========");
+            WriteLine("1. Grade a Student");
+            WriteLine("2. Display grades");
+            WriteLine("3. Change Grade");
+            WriteLine("4. Delete Grade");
+            WriteLine("5. Back to Main Menu");
+            WriteLine();
+
+            Write("Enter your choice: ");
+            choice = int.Parse(ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Clear();
+                    grading.AddGrade();
+                    break;
+                case 2:
+                    Clear();
+                    grading.DisplayGrades();
+                    break;
+                case 3:
+                    grading.UpdateGrade();
+                    break;
+                case 4:
+                    grading.DeleteGrade();
+                    break;
+                case 5:
+                    Clear();
+                    break;
+                default:
+                    WriteLine("Invalid choice. Please enter a number between 1 and 5.");
+                    break;
+            }
+        } while (choice != 5);
+    }
+
     //Student management
     static void StudentManagementMenu()
     {
@@ -78,18 +197,18 @@ class Program
             {
                 case 1:
                     Clear();
-                    AddStudent();
+                    student.AddStudent();
                     break;
                 case 2:
                     Clear();
-                    DisplayStudents();
+                    student.DisplayStudents();
                     break;
                 case 3:
                     Clear();
-                    UpdateStudent();
+                    student.UpdateStudent();
                     break;
                 case 4:
-                    DeleteStudent();
+                    student.DeleteStudent();
                     break;
                 case 5:
                     break;
@@ -98,22 +217,6 @@ class Program
                     break;
             }
         } while (choice != 5);
-    }
-    static void AddStudent()
-    {
-        student.AddStudent();
-    }
-    static void DisplayStudents()
-    {
-        student.DisplayStudents();
-    }
-    static void DeleteStudent()
-    {
-        student.DeleteStudent();
-    }
-    static void UpdateStudent()
-    {
-        student.UpdateStudent();
     }
 
     //Course management
@@ -138,18 +241,18 @@ class Program
             {
                 case 1:
                     Clear();
-                    AddCourse();
+                    course.AddCourse();
                     break;
                 case 2:
                     Clear();
-                    DisplayCourses();
+                    course.DisplayCourses();
                     break;
                 case 3:
                     Clear();
-                    UpdateCourse();
+                    course.UpdateCourse();
                     break;
                 case 4:
-                    DeleteCourse();
+                    course.DeleteCourse();
                     break;
                 case 5:
                     break;
@@ -159,22 +262,8 @@ class Program
             }
         } while (choice != 5);
     }
-    static void AddCourse()
-    {
-        course.AddCourse();
-    }
-    static void DisplayCourses()
-    {
-        course.DisplayCourses();
-    }
-    static void UpdateCourse()
-    {
-        course.UpdateCourse();
-    }
-    static void DeleteCourse()
-    {
-        course.DeleteCourse();
-    }
+
+    //Enrollment Management
     static void EnrollmentManagementMenu()
     {
         int choice;
@@ -194,13 +283,16 @@ class Program
             switch (choice)
             {
                 case 1:
-                    EnrollStudent();
+                    Clear();
+                    enrollment.EnrollStudent();
                     break;
                 case 2:
-                    DisplayEnrollments();
+                    Clear();
+                    enrollment.DisplayEnrollments();
                     break;
                 case 3:
-                    //WithdrawStudent();
+                    Clear();
+                    enrollment.WithdrawStudent();
                     break;
                 case 4:
                     break;
@@ -210,15 +302,8 @@ class Program
             }
         } while (choice != 4);
     }
-    static void DisplayEnrollments()
-    {
-        enrollment.DisplayEnrollments();
-    }
-    static void EnrollStudent()
-    {
-        enrollment.EnrollStudent();
-    }
 
+    //Faculty Management
     static void FacultyManagementMenu()
     {
         int choice;
@@ -229,8 +314,7 @@ class Program
             WriteLine("1. Add Faculty");
             WriteLine("2. Display Faculty");
             WriteLine("3. Update Faculty");
-            WriteLine("4. Delete Faculty");
-            WriteLine("5. Back to Main Menu");
+            WriteLine("4. Back to Main Menu");
             WriteLine();
 
             Write("Enter your choice: ");
@@ -239,18 +323,18 @@ class Program
             switch (choice)
             {
                 case 1:
-                    AddFaculty();
+                    Clear();
+                    faculty.AddFaculty();
                     break;
                 case 2:
-                    DisplayFaculties();
+                    Clear();
+                    faculty.DisplayFaculties();
                     break;
                 case 3:
-                    UpdateFaculty();
+                    Clear();
+                    faculty.UpdateFaculty();
                     break;
                 case 4:
-                    DeleteFaculty();
-                    break;
-                case 5:
                     break;
                 default:
                     WriteLine("Invalid choice. Please enter a number between 1 and 5.");
@@ -258,22 +342,8 @@ class Program
             }
         } while (choice != 5);
     }
-    static void AddFaculty()
-    {
-        faculty.AddFaculty();
-    }
-    static void DisplayFaculties()
-    {
-        faculty.DisplayFaculties();
-    }
-    static void UpdateFaculty()
-    {
-        faculty.UpdateFaculty();
-    }
-    static void DeleteFaculty()
-    {
-        faculty.DeleteFaculty();
-    }
+
+    // Semester management
     static void SemesterManagementMenu()
     {
         int choice;
@@ -284,8 +354,7 @@ class Program
             WriteLine("1. Add Semester");
             WriteLine("2. Display Semesters");
             WriteLine("3. Update Semester");
-            WriteLine("4. Delete Semester");
-            WriteLine("5. Back to Main Menu");
+            WriteLine("4. Back to Main Menu");
             WriteLine();
 
             Write("Enter your choice: ");
@@ -294,18 +363,18 @@ class Program
             switch (choice)
             {
                 case 1:
-                    AddSemester();
+                    Clear();
+                    semester.AddSemester();
                     break;
                 case 2:
-                    DisplaySemesters();
+                    Clear();
+                    semester.DisplaySemesters();
                     break;
                 case 3:
-                    UpdateSemester();
+                    Clear();
+                    semester.UpdateSemester();
                     break;
                 case 4:
-                    DeleteSemester();
-                    break;
-                case 5:
                     break;
                 default:
                     WriteLine("Invalid choice. Please enter a number between 1 and 5.");
@@ -313,23 +382,5 @@ class Program
             }
         } while (choice != 5);
     }
-
-    static void AddSemester()
-    {
-        semester.AddSemester();
-    }
-    static void DisplaySemesters()
-    {
-        semester.DisplaySemesters();
-    }
-    static void UpdateSemester()
-    {
-        semester.UpdateSemester();
-    }
-    static void DeleteSemester()
-    {
-        semester.DeleteSemester();
-    }
-
 
 }

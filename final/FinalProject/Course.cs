@@ -7,6 +7,7 @@ public class Course : Connection
     string courseTitle;
     int credits;
     int department;
+    int sectionId;
 
     public string CourseCode
     {
@@ -28,7 +29,11 @@ public class Course : Connection
         get { return department; }
         set { department = value; }
     }
-
+    public int SectionId
+    {
+        get { return sectionId; }
+        set { sectionId = value; }
+    }
     public void AddCourse()
     {
         WriteLine("Enter the course details:");
@@ -50,8 +55,8 @@ public class Course : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "INSERT INTO course (course_code, course_title, credits, department_id)" +
-                            "VALUES (@courseCode, @courseTitle, @credits, @department)";
+            string query = @"INSERT INTO course (course_code, course_title, credits, department_id)
+                            VALUES (@courseCode, @courseTitle, @credits, @department)";
 
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@courseCode", CourseCode);
@@ -67,9 +72,9 @@ public class Course : Connection
     {
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "SELECT course_code, course_title, credits, dept_name " +
-                            "FROM course c " +
-                            "INNER JOIN department d on c.department_id = d.department_id";
+            string query = @"SELECT course_code, course_title, credits, dept_name
+                            FROM course c
+                            INNER JOIN department d on c.department_id = d.department_id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
@@ -137,9 +142,9 @@ public class Course : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "UPDATE course SET course_code = @newCourseCode, course_title = @newCourseTitle, " +
-                            "credits = @newCourseCredits, department_id = @newDepartmentId " +
-                            "WHERE course_code = @courseToUpdate";
+            string query = @"UPDATE course SET course_code = @newCourseCode, course_title = @newCourseTitle,
+                            credits = @newCourseCredits, department_id = @newDepartmentId
+                            WHERE course_code = @courseToUpdate";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@newCourseCode", newCourseCode);
             cmd.Parameters.AddWithValue("@newCourseTitle", newCourseTitle);

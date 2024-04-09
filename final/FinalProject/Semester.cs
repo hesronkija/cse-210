@@ -23,11 +23,11 @@ public class Semester : Connection
         get { return term; }
         set { term = value; }
     }
-    
+
     public void AddSemester()
     {
         WriteLine("Enter semester details:");
-        Write("Faculty ID: ");
+        Write("Semester ID: ");
         SemesterId = int.Parse(ReadLine());
         Write("Year: ");
         Year = ReadLine();
@@ -36,8 +36,8 @@ public class Semester : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "INSERT INTO semester (semester_id, year, term) " +
-                           "VALUES (@semesterId, @year, @term)";
+            string query = @"INSERT INTO semester (semester_id, year, term)
+                            VALUES (@semesterId, @year, @term)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@semesterId", SemesterId);
             cmd.Parameters.AddWithValue("@year", Year);
@@ -68,27 +68,6 @@ public class Semester : Connection
         }
     }
 
-    public void DeleteSemester()
-    {
-        DisplaySemesters();
-
-        Write("Enter the ID of the semester you want to delete: ");
-        int semesterIdToDelete = int.Parse(ReadLine());
-
-        using (MySqlConnection connection = OpenConnection())
-        {
-            string query = "DELETE FROM semester WHERE semester_id = @semesterIdToDelete";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@semesterIdToDelete", semesterIdToDelete);
-            int rowsAffected = cmd.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
-                WriteLine("Semester deleted successfully.");
-            else
-                WriteLine("No semester found with the provided ID.");
-        }
-    }
-
     public void UpdateSemester()
     {
         DisplaySemesters();
@@ -96,7 +75,7 @@ public class Semester : Connection
         Write("Enter the ID of the semester you want to update: ");
         int semesterIdToUpdate = int.Parse(ReadLine());
         WriteLine("OK! Lets update the semester");
-        
+
         Write("Enter new year: ");
         string newYear = ReadLine();
 
@@ -118,7 +97,7 @@ public class Semester : Connection
                 WriteLine("Semester updated successfully.");
             else
                 WriteLine("Failed to update semester.");
-            
+
         }
     }
 

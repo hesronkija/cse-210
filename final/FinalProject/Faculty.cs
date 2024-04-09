@@ -36,8 +36,8 @@ public class Faculty : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "INSERT INTO faculty (faculty_id, faculty_fname, faculty_lname) " +
-                           "VALUES (@facultyId, @firstName, @lastName)";
+            string query = @"INSERT INTO faculty (faculty_id, faculty_fname, faculty_lname) 
+                            VALUES (@facultyId, @firstName, @lastName)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@facultyId", FacultyId);
             cmd.Parameters.AddWithValue("@firstName", FirstName);
@@ -68,27 +68,6 @@ public class Faculty : Connection
         }
     }
 
-    public void DeleteFaculty()
-    {
-        DisplayFaculties();
-
-        Write("Enter the ID of the faculty you want to delete: ");
-        int facultyIdToDelete = int.Parse(ReadLine());
-
-        using (MySqlConnection connection = OpenConnection())
-        {
-            string query = "DELETE FROM faculty WHERE faculty_id = @facultyIdToDelete";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@facultyIdToDelete", facultyIdToDelete);
-            int rowsAffected = cmd.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
-                WriteLine("Faculty deleted successfully.");
-            else
-                WriteLine("No faculty found with the provided ID.");
-        }
-    }
-
     public void UpdateFaculty()
     {
         DisplayFaculties();
@@ -105,8 +84,8 @@ public class Faculty : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "UPDATE faculty SET faculty_fname = @newFirstName, faculty_lname = @newLastName " +
-                           "WHERE faculty_id = @facultyIdToUpdate";
+            string query = @"UPDATE faculty SET faculty_fname = @newFirstName, faculty_lname = @newLastName
+                            WHERE faculty_id = @facultyIdToUpdate";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@newFirstName", newFirstName);
             cmd.Parameters.AddWithValue("@newLastName", newLastName);

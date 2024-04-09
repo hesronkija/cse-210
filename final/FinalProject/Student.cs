@@ -47,11 +47,10 @@ public class Student : Connection
         get { return birthdate; }
         set { birthdate = value; }
     }
-    private void DisplayStudentsWithNames()
+    protected void DisplayStudents(string query)
     {
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "SELECT student_id, first_name, last_name FROM student";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
@@ -88,8 +87,8 @@ public class Student : Connection
 
         using (MySqlConnection connection = OpenConnection())
         {
-            string query = "INSERT INTO student (student_id, first_name, last_name, gender, city, state, birthdate) " +
-                           "VALUES (@studentId, @firstName, @lastName, @gender, @city, @state, @birthdate)";
+            string query = @"INSERT INTO student (student_id, first_name, last_name, gender, city, state, birthdate)
+                           VALUES (@studentId, @firstName, @lastName, @gender, @city, @state, @birthdate)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@studentId", StudentId);
             cmd.Parameters.AddWithValue("@firstName", FirstName);
@@ -99,7 +98,10 @@ public class Student : Connection
             cmd.Parameters.AddWithValue("@state", State);
             cmd.Parameters.AddWithValue("@birthdate", Birthdate);
 
-            cmd.ExecuteNonQuery();
+            int rowsAffected = cmd.ExecuteNonQuery();
+            if (rowsAffected > 0)
+                WriteLine("Student added successfully.");
+            Clear();
         }
     }
 
@@ -129,13 +131,14 @@ public class Student : Connection
                     WriteLine($"\tBirthdate: {birthdate.ToShortDateString()}");
                     WriteLine();
                 }
+                Thread.Sleep(500);
             }
         }
     }
 
     public void DeleteStudent()
     {
-        DisplayStudentsWithNames();
+        DisplayStudents();
 
         Write("Enter the ID of the student you want to delete: ");
         int studentIdToDelete = int.Parse(ReadLine());
@@ -148,7 +151,7 @@ public class Student : Connection
             int rowsAffected = cmd.ExecuteNonQuery();
 
             if (rowsAffected > 0)
-                WriteLine("Student deleted successfully.");
+                WriteLine("Student deleted successfully.\n");
             else
                 WriteLine("No student found with the provided ID.");
         }
@@ -156,7 +159,7 @@ public class Student : Connection
 
     public void UpdateStudent()
     {
-        DisplayStudentsWithNames();
+        DisplayStudents();
 
         Write("Enter the ID of the student you want to update: ");
         int studentIdToUpdate = int.Parse(ReadLine());
@@ -197,12 +200,11 @@ public class Student : Connection
             int rowsAffected = cmd.ExecuteNonQuery();
 
             if (rowsAffected > 0)
-                WriteLine("Student updated successfully.");
+                WriteLine("Student updated successfully.\n");
             else
                 WriteLine("Failed to update student.");
             
         }
     }
-
 
 }
